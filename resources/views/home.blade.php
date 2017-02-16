@@ -2,6 +2,7 @@
 
 @section('content')
 
-<p>Hola mundo</p>
+<section id="app">
+</section>
 
 @endsection

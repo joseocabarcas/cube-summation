@@ -19,4 +19,10 @@ const app = new Vue({
     el: '#app'
 });
 */
-import Example from './components/Home';
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import Home from './components/Home';
+if (document.getElementById('app')) {
+    ReactDOM.render(<Home />, document.getElementById('app'));
+}

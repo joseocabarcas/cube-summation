@@ -1,0 +1,20 @@
+.list-command {
+	margin-top: 20px;
+	.command {
+		.indicator , .query, .result {
+			display: inline-block;
+			margin: 0 5px;
+		}
+		.indicator {
+			font-size: 20px;
+			font-weight: bold;
+		}
+		.query {
+			text-align: center;
+			width: 300px;
+		}
+		.result {
+			color: #01DF01;
+		}
+	}
+}

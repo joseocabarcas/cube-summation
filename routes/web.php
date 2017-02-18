@@ -16,6 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('/home/', 'CubeController@index');
-Route::post('/create/', 'CuboController@postCreate');
+Route::post('/create/', 'CubeController@postCreate');
 Route::post('/update/', 'CubeController@postUpdate');
 Route::post('/query/', 'CubeController@postQuery');

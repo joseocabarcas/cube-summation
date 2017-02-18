@@ -10,7 +10,7 @@ class CubeController extends Controller
     //
     public function index(Request $request)
     {
-    	$request->session()->flush();
+    	$request->session()->forget('matriz');
     	return view('home');
     }
 
@@ -30,11 +30,15 @@ class CubeController extends Controller
         $request->session()->put('matriz', $matriz);
         $request->session()->put('operaciones', 0);
 
+        \Log::info(\Session::all());
+
     	return response()->json(['ok' => 'true']);
     }
 
     public function postUpdate(Request $request)
     {
+
+    	\Log::info(\Session::all());
 
         $this->validate($request, [
             'x' => 'required|integer|min:1',
@@ -45,20 +49,17 @@ class CubeController extends Controller
 
         $matriz = $request->session()->get('matriz');
 
-        if (!$matriz) {
+        if (!$matriz)
             return response()->json(['err' => 'Por favor cree la matriz'], 500);
-        }
 
         $index = $request->only('x', 'y', 'z');
         $value = $request->input('w');
 
-        if ($index['x'] > $matriz->getN() || $index['y'] > $matriz->getN() || $index['z'] > $matriz->getN()) {
-            return response()->json(['err' => 'Estos valores no coinciden con el tamaño de la matriz'], 400);
-        }
+        if ($index['x'] > $matriz->getN() || $index['y'] > $matriz->getN() || $index['z'] > $matriz->getN())
+        	return response()->json(['err' => 'Estos valores no coinciden con el tamaño de la matriz'], 400);
 
-        if (!$this->checkTests($matriz)) {
+        if (!$matriz->validateT())
             return response()->json(['err' => 'Tests finalizados'], 500);
-        };
 
         $matriz->update($index['x'] - 1, $index['y'] - 1, $index['z'] - 1, $value);
 
@@ -67,6 +68,37 @@ class CubeController extends Controller
 
     public function postQuery(Request $request)
     {
-    	return response()->json();
+
+    	\Log::info(\Session::all());
+
+        $this->validate($request, [
+            'x1' => 'required|min:1',
+            'x2' => 'required|min:1',
+            'y1' => 'required|min:1',
+            'y2' => 'required|min:1',
+            'z1' => 'required|min:1',
+            'z2' => 'required|min:1',
+        ]);
+
+        $matriz = $request->session()->get('matriz');
+
+        if (!$matriz)
+            return response()->json(['err' => 'Por favor cree la matriz'], 500);
+
+        $index = $request->only('x1', 'x2', 'y1', 'y2', 'z1', 'z2');
+        
+        if($index['x2']-1 < $index['x1']-1 || $index['y2']-1 < $index['y1']-1 || $index['z2']-1 < $index['z1']-1)
+            return response()->json(['error' => 'Los indices de X tienen que ser mayores a los de Y'], 400);
+
+        if(!$matriz->validateT())
+            return response()->json(['error' => 'Tests finalizados'], 500);
+
+        $result = $matriz->query($index['x1']-1, $index['y1']-1, $index['z1']-1, $index['x2']-1, $index['y2']-1, $index['z2']-1);
+
+        
+        \Log::info($result);
+
+
+        return response()->json(['result' => $result]);
     }
 }

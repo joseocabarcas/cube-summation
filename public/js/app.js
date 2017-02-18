@@ -21292,35 +21292,135 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var FormComando = function (_Component) {
-	_inherits(FormComando, _Component);
+  _inherits(FormComando, _Component);
 
-	function FormComando() {
-		_classCallCheck(this, FormComando);
+  function FormComando(props) {
+    _classCallCheck(this, FormComando);
 
-		return _possibleConstructorReturn(this, (FormComando.__proto__ || Object.getPrototypeOf(FormComando)).apply(this, arguments));
-	}
+    var _this2 = _possibleConstructorReturn(this, (FormComando.__proto__ || Object.getPrototypeOf(FormComando)).call(this, props));
 
-	_createClass(FormComando, [{
-		key: "render",
-		value: function render() {
-			return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-				"div",
-				{ className: "input-group" },
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", className: "form-control", placeholder: "Ejecutar comando..." }),
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-					"span",
-					{ className: "input-group-btn" },
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-						"button",
-						{ className: "btn btn-default", type: "button" },
-						"\u276F"
-					)
-				)
-			);
-		}
-	}]);
+    _this2.state = {
+      comando: ''
+    };
+    _this2.handleChange = _this2.handleChange.bind(_this2);
+    _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+    _this2.handleReset = _this2.handleReset.bind(_this2);
+    return _this2;
+  }
 
-	return FormComando;
+  _createClass(FormComando, [{
+    key: 'handleChange',
+    value: function handleChange(event) {
+      this.setState({
+        comando: event.target.value
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      var _this = this;
+      event.preventDefault();
+      var comandos = this.state.comando.split(" ");
+
+      switch (comandos[0].toUpperCase()) {
+        case "UPDATE":
+          if (comandos.length !== 5) {
+            return alert("Comando UPDATE mal formado");
+          }
+
+          window.axios.post('./update', {
+            x: comandos[1],
+            y: comandos[2],
+            z: comandos[3],
+            w: comandos[4]
+          }).then(function (response) {
+            console.log(response);
+            _this.props.updateCommand({ command: _this.state.comando, letter: 'U', response: 'OK' });
+            _this.setState({
+              comando: ''
+            });
+            _this.props.updateOperation();
+          }).catch(function (error) {
+            console.log(error);
+            //processErrorMessages(data);
+          });
+
+          break;
+        case "QUERY":
+
+          if (comandos.length !== 7) {
+            return alert("Comando QUERY mal formado");
+          }
+
+          window.axios.post('./query', {
+            x1: comandos[1],
+            y1: comandos[2],
+            z1: comandos[3],
+            x2: comandos[4],
+            y2: comandos[5],
+            z2: comandos[6]
+          }).then(function (response) {
+            console.log(response.data);
+            _this.props.updateCommand({ command: _this.state.comando, letter: 'Q', response: response.data.result });
+            _this.setState({
+              comando: ''
+            });
+            _this.props.updateOperation();
+          }).catch(function (error) {
+            console.log(error);
+            //processErrorMessages(data);
+          });
+          break;
+
+        default:
+          return alert("El comando " + _this.state.comando + " no es valido");
+
+          break;
+      }
+    }
+  }, {
+    key: 'handleReset',
+    value: function handleReset() {
+      this.props.changeState('active', false);
+      this.props.changeState('operaciones', 0);
+      this.props.changeState('comandos', []);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      console.debug('if', this.props.operations);
+      console.debug('if', this.props.cubeM);
+      var element = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'div',
+          { className: 'input-group' },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Ejecutar comando...',
+            name: 'comando',
+            onChange: this.handleChange,
+            value: this.state.comando }),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'span',
+            { className: 'input-group-btn' },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'button',
+              { className: 'btn btn-default', type: 'button', onClick: this.handleSubmit, disabled: this.props.operations >= this.props.cubeM },
+              '\u276F'
+            )
+          )
+        ),
+        this.props.operations >= this.props.cubeM ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'button',
+          { 'class': 'btn btn-success', onClick: this.handleReset },
+          'Reset'
+        ) : null
+      );
+      return this.props.activate ? element : null;
+    }
+  }]);
+
+  return FormComando;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 /* harmony default export */ __webpack_exports__["a"] = FormComando;
@@ -21343,60 +21443,69 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var FormMatrix = function (_Component) {
-	_inherits(FormMatrix, _Component);
+				_inherits(FormMatrix, _Component);
 
-	function FormMatrix() {
-		_classCallCheck(this, FormMatrix);
+				function FormMatrix(props) {
+								_classCallCheck(this, FormMatrix);
 
-		return _possibleConstructorReturn(this, (FormMatrix.__proto__ || Object.getPrototypeOf(FormMatrix)).apply(this, arguments));
-	}
+								return _possibleConstructorReturn(this, (FormMatrix.__proto__ || Object.getPrototypeOf(FormMatrix)).call(this, props));
+				}
 
-	_createClass(FormMatrix, [{
-		key: "render",
-		value: function render() {
-			return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-				"form",
-				{ name: "create-matrix" },
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-					"div",
-					{ className: "form-group" },
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-						"label",
-						{ htmlFor: "test" },
-						"Numero de Tests"
-					),
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "test", placeholder: "Cuantos test quiere realizar" })
-				),
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-					"div",
-					{ className: "form-group" },
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-						"label",
-						{ htmlFor: "N" },
-						"N"
-					),
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "N", placeholder: "Asigne el valor de N" })
-				),
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-					"div",
-					{ className: "form-group" },
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-						"label",
-						{ htmlFor: "M" },
-						"M"
-					),
-					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "M", placeholder: "Asigne el valor de M" })
-				),
-				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-					"button",
-					{ type: "button", className: "btn btn-primary" },
-					"Crear"
-				)
-			);
-		}
-	}]);
+				_createClass(FormMatrix, [{
+								key: "render",
+								value: function render() {
+												return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																"form",
+																{ name: "create-matrix" },
+																__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																				"div",
+																				{ className: "form-group" },
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																								"label",
+																								{ htmlFor: "test" },
+																								"Numero de Tests"
+																				),
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "test", placeholder: "Cuantos test quiere realizar",
+																								name: "t",
+																								value: this.props.matriz.t,
+																								onChange: this.props.onChange, disabled: !this.props.activate && this.props.Ntest > 0 })
+																),
+																__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																				"div",
+																				{ className: "form-group" },
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																								"label",
+																								{ htmlFor: "N" },
+																								"N"
+																				),
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "N", placeholder: "Asigne el valor de N",
+																								name: "n",
+																								value: this.props.matriz.n,
+																								onChange: this.props.onChange })
+																),
+																__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																				"div",
+																				{ className: "form-group" },
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																								"label",
+																								{ htmlFor: "M" },
+																								"M"
+																				),
+																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "number", className: "form-control", id: "M", placeholder: "Asigne el valor de M",
+																								name: "m",
+																								value: this.props.matriz.m,
+																								onChange: this.props.onChange })
+																),
+																__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+																				"button",
+																				{ type: "button", className: "btn btn-primary", onClick: this.props.onClick },
+																				"Crear"
+																)
+												);
+								}
+				}]);
 
-	return FormMatrix;
+				return FormMatrix;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 /* harmony default export */ __webpack_exports__["a"] = FormMatrix;
@@ -21413,6 +21522,8 @@ var FormMatrix = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ListComandos__ = __webpack_require__(112);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -21425,36 +21536,82 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var Home = function (_Component) {
-				_inherits(Home, _Component);
+	_inherits(Home, _Component);
 
-				function Home() {
-								_classCallCheck(this, Home);
+	function Home(props) {
+		_classCallCheck(this, Home);
 
-								return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
-				}
+		var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this, props));
 
-				_createClass(Home, [{
-								key: 'render',
-								value: function render() {
-												return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-																'div',
-																{ className: 'container' },
-																__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-																				'div',
-																				{ className: 'row' },
-																				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-																								'div',
-																								{ className: 'col-md-8 col-md-offset-2' },
-																								__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Matrix__["a" /* default */], null),
-																								__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__FormComando__["a" /* default */], null),
-																								__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ListComandos__["a" /* default */], null)
-																				)
-																)
-												);
-								}
-				}]);
+		_this.state = {
+			active: false,
+			operaciones: 0,
+			comandos: [],
+			Ntest: 0,
+			cubeM: 0,
+			cubeT: 0
+		};
+		_this.changeState = _this.changeState.bind(_this);
+		_this.updateCommand = _this.updateCommand.bind(_this);
+		_this.updateOperation = _this.updateOperation.bind(_this);
+		return _this;
+	}
 
-				return Home;
+	_createClass(Home, [{
+		key: 'changeState',
+		value: function changeState(field, value) {
+			console.log(field);
+			console.log(value);
+			this.setState(_defineProperty({}, field, value));
+			console.log(this.state);
+		}
+	}, {
+		key: 'updateCommand',
+		value: function updateCommand(command) {
+			this.setState({
+				comandos: this.state.comandos.concat([command])
+			});
+		}
+	}, {
+		key: 'updateOperation',
+		value: function updateOperation() {
+			this.setState({
+				operaciones: this.state.operaciones + 1
+			});
+
+			if (this.state.operaciones >= this.state.cubeM) {
+				this.state.Ntest += 1;
+			}
+
+			if (this.state.Ntest >= this.state.cubeT) {
+				this.state.Ntest = 0;
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+				'div',
+				{ className: 'container' },
+				__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+					'div',
+					{ className: 'row' },
+					__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+						'div',
+						{ className: 'col-md-8 col-md-offset-2' },
+						__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Matrix__["a" /* default */], { activate: this.state.active, changeState: this.changeState, Ntest: this.state.Ntest }),
+						__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__FormComando__["a" /* default */], { activate: this.state.active, changeState: this.changeState,
+							updateCommand: this.updateCommand, updateOperation: this.updateOperation,
+							operations: this.state.operaciones,
+							cubeM: this.state.cubeM }),
+						__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ListComandos__["a" /* default */], { activate: this.state.active, changeState: this.changeState, commands: this.state.comandos })
+					)
+				)
+			);
+		}
+	}]);
+
+	return Home;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
 
 /* harmony default export */ __webpack_exports__["a"] = Home;
@@ -21466,6 +21623,7 @@ var Home = function (_Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Command__ = __webpack_require__(224);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21473,6 +21631,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -21486,59 +21645,25 @@ var ListComandos = function (_Component) {
     }
 
     _createClass(ListComandos, [{
-        key: "render",
+        key: 'render',
         value: function render() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "panel panel-default list-command" },
+            var element = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'panel panel-default list-command' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    { className: "panel-heading" },
-                    "Log Comandos"
+                    'div',
+                    { className: 'panel-heading' },
+                    'Log Comandos'
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    { className: "panel-body" },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "article",
-                        { className: "command" },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "span",
-                            { className: "indicator" },
-                            "Q"
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "p",
-                            { className: "query" },
-                            "QUERY 2 2 2 3 3 3 34"
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "span",
-                            { className: "result" },
-                            "56"
-                        )
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "article",
-                        { className: "command" },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "span",
-                            { className: "indicator" },
-                            "U"
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "p",
-                            { className: "query" },
-                            "UPDATE 3 3 3 45"
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "span",
-                            { className: "result" },
-                            "Ok"
-                        )
-                    )
+                    'div',
+                    { className: 'panel-body' },
+                    this.props.commands.map(function (command, index) {
+                        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Command__["a" /* default */], { command: command, key: index });
+                    })
                 )
             );
+            return this.props.activate ? element : null;
         }
     }]);
 
@@ -21569,18 +21694,59 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Matrix = function (_Component) {
     _inherits(Matrix, _Component);
 
-    function Matrix() {
+    function Matrix(props) {
         _classCallCheck(this, Matrix);
 
-        return _possibleConstructorReturn(this, (Matrix.__proto__ || Object.getPrototypeOf(Matrix)).apply(this, arguments));
+        var _this2 = _possibleConstructorReturn(this, (Matrix.__proto__ || Object.getPrototypeOf(Matrix)).call(this, props));
+
+        _this2.state = {
+            matriz: {
+                t: '',
+                n: '',
+                m: ''
+            }
+        };
+
+        _this2.handleChange = _this2.handleChange.bind(_this2);
+        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+        return _this2;
     }
 
     _createClass(Matrix, [{
+        key: 'handleChange',
+        value: function handleChange(event) {
+            var field = event.target.name;
+            var matriz = this.state.matriz;
+            matriz[field] = event.target.value;
+            return this.setState({ matriz: matriz });
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(event) {
+            var _this = this;
+            console.debug(this.state);
+            event.preventDefault();
+            window.axios.post('./create', {
+                t: this.state.matriz.t,
+                n: this.state.matriz.n,
+                m: this.state.matriz.m
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data.ok) {
+                    _this.props.changeState('active', true);
+                    _this.props.changeState('cubeM', _this.state.matriz.m);
+                    _this.props.changeState('cubeT', _this.state.matriz.t);
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            var element = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'panel panel-default' },
+                { className: 'panel panel-default ' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'panel-heading' },
@@ -21589,9 +21755,10 @@ var Matrix = function (_Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'panel-body' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__FormMatrix__["a" /* default */], null)
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__FormMatrix__["a" /* default */], { matriz: this.state.matriz, onClick: this.handleSubmit, onChange: this.handleChange, activate: this.props.activate, Ntest: this.props.Ntest })
                 )
             );
+            return this.props.activate ? null : element;
         }
     }]);
 
@@ -53378,6 +53545,70 @@ module.exports = function(module) {
 __webpack_require__(88);
 module.exports = __webpack_require__(89);
 
+
+/***/ }),
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var Command = function (_Component) {
+    _inherits(Command, _Component);
+
+    function Command() {
+        _classCallCheck(this, Command);
+
+        return _possibleConstructorReturn(this, (Command.__proto__ || Object.getPrototypeOf(Command)).apply(this, arguments));
+    }
+
+    _createClass(Command, [{
+        key: "render",
+        value: function render() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "article",
+                { className: "command" },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "span",
+                    { className: "indicator" },
+                    this.props.command.letter
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "p",
+                    { className: "query" },
+                    this.props.command.command
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "span",
+                    { className: "result" },
+                    this.props.command.response
+                )
+            );
+        }
+    }]);
+
+    return Command;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
+
+/* harmony default export */ __webpack_exports__["a"] = Command;
 
 /***/ })
 /******/ ]);

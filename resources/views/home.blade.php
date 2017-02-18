@@ -5,6 +5,7 @@
 <section id="app">
 </section>
 
+
 <script>
 	var exist = false;
 	@if(Session::has('matriz'))

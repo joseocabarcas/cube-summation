@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
+import Command from './Command';
 
 class ListComandos extends Component {
     render() {
-        return (
+        const element = (
 			<div className="panel panel-default list-command">
                 <div className="panel-heading">Log Comandos</div>
 
                 <div className="panel-body">
-                	<article className="command">
-                		<span className="indicator">Q</span>
-                		<p className="query">QUERY 2 2 2 3 3 3 34</p>
-                		<span className="result">56</span>
-                	</article>
-                	<article className="command">
-                		<span className="indicator">U</span>
-                		<p className="query">UPDATE 3 3 3 45</p>
-                		<span className="result">Ok</span>
-                	</article>
+                {
+                	this.props.commands.map( (command, index) => {
+                        return <Command command={command} key={index}/>
+                    })
+                }
                 </div>
             </div>
-        );
+        )
+        return  this.props.activate ? element : null ;
     }
 }
 

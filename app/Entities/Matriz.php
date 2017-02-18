@@ -58,6 +58,18 @@ class Matriz
         return $this->t;
     }
 
+    public function validateT()
+    {
+        $ope= session('operaciones');
+        if ($ope >= $this->m) {
+            session()->forget('matriz');
+            return false;
+        } else {
+            session()->put('operaciones', $ope + 1 );
+        }
+        return true;
+    }
+
     // Metodo interno para construir la matriz 3D
     private function build($n)
     {

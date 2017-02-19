@@ -21,12 +21,9 @@ class Home extends Component {
 	}
 
 	changeState(field, value) {
-		console.log(field)
-		console.log(value)
 		this.setState({
 			[field]: value
 		})
-		console.log(this.state)
 	}
 
 	updateCommand(command) {

@@ -21334,7 +21334,6 @@ var FormComando = function (_Component) {
             z: comandos[3],
             w: comandos[4]
           }).then(function (response) {
-            console.log(response);
             _this.props.updateCommand({ command: _this.state.comando, letter: 'U', response: 'OK' });
             _this.setState({
               comando: ''
@@ -21360,7 +21359,6 @@ var FormComando = function (_Component) {
             y2: comandos[5],
             z2: comandos[6]
           }).then(function (response) {
-            console.log(response.data);
             _this.props.updateCommand({ command: _this.state.comando, letter: 'Q', response: response.data.result });
             _this.setState({
               comando: ''
@@ -21388,8 +21386,6 @@ var FormComando = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.debug('if', this.props.operations);
-      console.debug('if', this.props.cubeM);
       var element = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         null,
@@ -21412,7 +21408,7 @@ var FormComando = function (_Component) {
         ),
         this.props.operations >= this.props.cubeM ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'button',
-          { 'class': 'btn btn-success', onClick: this.handleReset },
+          { className: 'btn btn-warning', onClick: this.handleReset },
           'Reset'
         ) : null
       );
@@ -21560,10 +21556,7 @@ var Home = function (_Component) {
 	_createClass(Home, [{
 		key: 'changeState',
 		value: function changeState(field, value) {
-			console.log(field);
-			console.log(value);
 			this.setState(_defineProperty({}, field, value));
-			console.log(this.state);
 		}
 	}, {
 		key: 'updateCommand',
@@ -21724,14 +21717,12 @@ var Matrix = function (_Component) {
         key: 'handleSubmit',
         value: function handleSubmit(event) {
             var _this = this;
-            console.debug(this.state);
             event.preventDefault();
             window.axios.post('./create', {
                 t: this.state.matriz.t,
                 n: this.state.matriz.n,
                 m: this.state.matriz.m
             }).then(function (response) {
-                console.log(response.data);
                 if (response.data.ok) {
                     _this.props.changeState('active', true);
                     _this.props.changeState('cubeM', _this.state.matriz.m);

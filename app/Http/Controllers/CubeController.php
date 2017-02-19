@@ -30,7 +30,6 @@ class CubeController extends Controller
         $request->session()->put('matriz', $matriz);
         $request->session()->put('operaciones', 0);
 
-        \Log::info(\Session::all());
 
     	return response()->json(['ok' => 'true']);
     }
@@ -38,7 +37,6 @@ class CubeController extends Controller
     public function postUpdate(Request $request)
     {
 
-    	\Log::info(\Session::all());
 
         $this->validate($request, [
             'x' => 'required|integer|min:1',
@@ -69,7 +67,6 @@ class CubeController extends Controller
     public function postQuery(Request $request)
     {
 
-    	\Log::info(\Session::all());
 
         $this->validate($request, [
             'x1' => 'required|min:1',
@@ -96,9 +93,6 @@ class CubeController extends Controller
         $result = $matriz->query($index['x1']-1, $index['y1']-1, $index['z1']-1, $index['x2']-1, $index['y2']-1, $index['z2']-1);
 
         
-        \Log::info($result);
-
-
         return response()->json(['result' => $result]);
     }
 }

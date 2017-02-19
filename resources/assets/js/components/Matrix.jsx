@@ -25,7 +25,6 @@ class Matrix extends Component {
 
     handleSubmit(event) {
         const _this = this;
-        console.debug(this.state);
         event.preventDefault();
         window.axios.post('./create', {
                     t: this.state.matriz.t,
@@ -33,7 +32,6 @@ class Matrix extends Component {
                     m: this.state.matriz.m, 
                 })
                   .then(function (response) {
-                    console.log(response.data);
                     if (response.data.ok) {
                         _this.props.changeState('active',true);
                         _this.props.changeState('cubeM',_this.state.matriz.m); 

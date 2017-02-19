@@ -1,40 +1,45 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Cube Summation Challenge
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Frameworks
 
-## About Laravel
+Para el desarrollo de la aplicación se hizo uso de: 
+-Laravel (Backend)
+-ReactJS (Frontend)
+-Laravel MIX (Wrapper para Webpack)
+-SASS (Preprocesador CSS)
+-Bootstrap (CSS)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+-Se hizo uso de Pattern Repository uno de los patrones SOLID en la ingenieria de software
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Capas de la aplicación
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+### Cliente
 
-## Learning Laravel
+La capa del cliente es la encargada de brindar la interacción con el usuario, en ella se hacen las validaciones y peticiones correspondientes al flujo de la aplicación
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+En esta capa se encuentran:
+- ReactJS: Encargado de renderizar las vistas dinamicamente y realizar las peticiones al servidor
+- Bootstrap: Encargado de facilitar la maquetación del sitio
+- SASS : Encargado de preprocesar el css para obtener mayor beneficio en el desarrollo
+- Laravel MIX: Encargado de compilar los archivos jsx y entregar un solo archivo compilado y minificado
+- Axios: Librería encargada de realizar las peticiones AJAX
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+### Servidor
 
-## Contributing
+La capa del servidor es la que se encarga de renderizar el html y dar respuesta a todas las peticiones que vengan del lado del cliente a traves de una pequeña API
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+### Datos
+La capa de datos es la encargada de persitir los datos que son enviados desde el servidor.
+- Se utilizó Laravel Session
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+## Instalación
 
-## License
+Ruta de Bienvenida Laravel (/)
+Ruta de Home (/home/)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+git clone https://github.com/joseomar10/cube-summation.git
+cd cube-summation
+composer install && npm install
+npm run watch (Terminal 1)
+php artisan serve (Terminal 2)

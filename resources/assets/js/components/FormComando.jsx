@@ -36,7 +36,6 @@ class FormComando extends Component {
                     w: comandos[4]
                 })
                   .then(function (response) {
-                    console.log(response);
                     _this.props.updateCommand({command: _this.state.comando, letter: 'U', response: 'OK'})
                     _this.setState({
 						comando: '',
@@ -64,7 +63,6 @@ class FormComando extends Component {
                     z2: comandos[6]
                 })
                   .then(function (response) {
-                    console.log(response.data);
                     _this.props.updateCommand({command: _this.state.comando, letter: 'Q', response: response.data.result})
                     _this.setState({
 						comando: '',
@@ -91,8 +89,6 @@ class FormComando extends Component {
 	}
 
     render() {
-    	console.debug('if',this.props.operations)
-    	console.debug('if',this.props.cubeM)
     	const element = (
     		<div>
 	    		<div className="input-group">
@@ -105,7 +101,7 @@ class FormComando extends Component {
 					</span>
 				</div>
 				{
-					(this.props.operations >= this.props.cubeM) ? (<button class="btn btn-success" onClick={this.handleReset}>Reset</button>) : null
+					(this.props.operations >= this.props.cubeM) ? (<button className="btn btn-warning" onClick={this.handleReset}>Reset</button>) : null
 				}
 			</div>
 			)
